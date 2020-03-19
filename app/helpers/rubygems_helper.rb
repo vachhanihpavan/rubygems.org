@@ -45,16 +45,16 @@ module RubygemsHelper
     if signed_in?
       if rubygem.subscribers.find_by_id(current_user.id)
         link_to t(".links.unsubscribe"), rubygem_subscription_path(rubygem),
-          class: [:toggler, "gem__link", "t-list__item"], id: "unsubscribe",
-          method: :delete
+                class: [:toggler, "gem__link", "t-list__item"], id: "unsubscribe",
+                method: :delete
       else
         link_to t(".links.subscribe"), rubygem_subscription_path(rubygem),
-          class: %w[toggler gem__link t-list__item], id: "subscribe",
-          method: :post
+                class: %w[toggler gem__link t-list__item], id: "subscribe",
+                method: :post
       end
     else
       link_to t(".links.subscribe"), sign_in_path,
-        class: [:toggler, "gem__link", "t-list__item"], id: :subscribe
+              class: [:toggler, "gem__link", "t-list__item"], id: :subscribe
     end
   end
 
@@ -63,13 +63,8 @@ module RubygemsHelper
     style = "t-item--hidden" unless rubygem.subscribers.find_by_id(current_user.id)
 
     link_to t(".links.unsubscribe"), rubygem_subscription_path(rubygem),
-      class: [:toggler, "gem__link", "t-list__item", style], id: "unsubscribe",
-      method: :delete, remote: true
-  end
-
-  def atom_link(rubygem)
-    link_to t(".links.rss"), rubygem_versions_path(rubygem, format: "atom"),
-      class: "gem__link t-list__item", id: :rss
+            class: [:toggler, "gem__link", "t-list__item", style], id: "unsubscribe",
+            method: :delete, remote: true
   end
 
   def reverse_dependencies_link(rubygem)
@@ -98,20 +93,11 @@ module RubygemsHelper
 
   def link_to_user(user)
     link_to gravatar(48, "gravatar-#{user.id}", user), profile_path(user.display_id),
-      alt: user.display_handle, title: user.display_handle
+            alt: user.display_handle, title: user.display_handle
   end
 
   def nice_date_for(time)
     time.to_date.to_formatted_s(:long)
-  end
-
-  def show_all_versions_link?(rubygem)
-    rubygem.versions_count > 5 || rubygem.yanked_versions?
-  end
-
-  def latest_version_number(rubygem)
-    return rubygem.version if rubygem.respond_to?(:version)
-    (rubygem.latest_version || rubygem.versions.last)&.number
   end
 
   def yanked?(rubygem)
