@@ -140,24 +140,33 @@ de:
     gem_pushed:
       subject:
       title:
-    gem_yanked:
-      subject:
-      title:
-    reset_api_key:
-      subject:
     ownership_confirmation:
       subject:
       title:
       subtitle:
       body_html:
       link_expiration_explanation:
-    owners_update:
-      subject_self:
-      subject_others:
-      body_self:
-      body_others:
+    gem_yanked:
+      subject:
+      title:
+    reset_api_key:
+      subject:
       title:
       subtitle:
+    owner_added:
+      subject_self:
+      subject_others:
+      title:
+      subtitle:
+      body_self:
+      body_others:
+    owner_removed:
+      subject_self:
+      subject_others:
+      title:
+      subtitle:
+      body_self:
+      body_others:
   news:
     show:
       title:
@@ -395,4 +404,13 @@ de:
   owners:
     confirm:
       confirmed_email:
-  token_expired: ""
+    index:
+      add_owner:
+      name:
+      mfa:
+      confirmed:
+      added_on:
+      added_by:
+      action:
+  token_expired:
+  resend_ownership_confirmation: ""

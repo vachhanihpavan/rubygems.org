@@ -1,6 +1,6 @@
 require "test_helper"
 
-class OwnerTest < ActionDispatch::IntegrationTest
+class Api::V1::OwnerTest < ActionDispatch::IntegrationTest
   setup do
     @user = create(:user)
     @other_user = create(:user)
@@ -16,8 +16,8 @@ class OwnerTest < ActionDispatch::IntegrationTest
       headers: { "HTTP_AUTHORIZATION" => @user.api_key }
     assert_response :success
 
-    @ownership = @other_user.ownerships.find_by(rubygem_id: @rubygem.id)
-    get confirm_rubygem_owners_url(@rubygem, token: @ownership.token.html_safe)
+    @ownership = @other_user.ownerships_including_unconfirmed.find_by(rubygem_id: @rubygem.id)
+    get confirm_rubygem_owners_url(@rubygem, token: @ownership.token)
 
     get rubygem_path(@rubygem)
     assert page.has_selector?("a[alt='#{@user.handle}']")
