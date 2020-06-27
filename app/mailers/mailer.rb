@@ -85,11 +85,7 @@ class Mailer < ApplicationMailer
     @owner = User.find(owner_id)
     @rubygem = Rubygem.find(gem_id)
     mail to: @user.email,
-         subject: if @owner.id == @user.id
-                    I18n.t("mailer.owners_update.subject_self", gem: @rubygem.name, status: "removed")
-                  else
-                    I18n.t("mailer.owners_update.subject_others", gem: @rubygem.name, status: "removed", owner_handle: @owner.handle)
-                  end
+         subject: owner_removed_subject
   end
 
   def owner_added(owner_id, user_id, gem_id)
@@ -97,10 +93,24 @@ class Mailer < ApplicationMailer
     @owner = User.find(owner_id)
     @rubygem = Rubygem.find(gem_id)
     mail to: @user.email,
-         subject: if @owner.id == @user.id
-                    I18n.t("mailer.owners_update.subject_self", gem: @rubygem.name, status: "added")
-                  else
-                    I18n.t("mailer.owners_update.subject_others", gem: @rubygem.name, status: "added", owner_handle: @owner.handle)
-                  end
+         subject: owner_added_subject
+  end
+
+  private
+
+  def owner_added_subject
+    if @owner.id == @user.id
+      I18n.t("mailer.owner_added.subject_self", gem: @rubygem.name)
+    else
+      I18n.t("mailer.owner_added.subject_others", gem: @rubygem.name, owner_handle: @owner.handle)
+    end
+  end
+
+  def owner_removed_subject
+    if @owner.id == @user.id
+      I18n.t("mailer.owner_removed.subject_self", gem: @rubygem.name)
+    else
+      I18n.t("mailer.owner_removed.subject_others", gem: @rubygem.name, owner_handle: @owner.handle)
+    end
   end
 end

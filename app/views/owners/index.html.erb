@@ -13,22 +13,22 @@
     </div>
 
     <div class="owners__wrapper">
-      <%= render 'owners_table' %>
+      <%= render "owners_table" %>
     </div>
   </div>
 
   <div class="column r-column">
     <div class="right_wrapper">
       <div class="t-body">
-        <h2>ADD OWNER</h2>
+        <h2><%= t('owners.index.add_owner') %></h2>
       </div>
       <%= form_for rubygem_owners_path, method: :post do |form| %>
-        <%= text_field_tag :owner, nil, placeholder: "Name of user", class: "add_owner__field" %>
+        <%= text_field_tag :owner, nil, placeholder: "Email / Handle", class: "add_owner__field" %>
         <%= label_tag :owner do %>
           <span class="t-hidden">Name of user</span>
         <% end %>
         <div class="submit_field">
-          <%= form.submit 'Add Owner', :data => {:disable_with => t('form_disable_with')}, :class => 'add__owners__button' %>
+          <%= form.submit "Add Owner", :data => {:disable_with => t('form_disable_with')}, :class => "add__owners__button" %>
         </div>
       <% end %>
     </div>

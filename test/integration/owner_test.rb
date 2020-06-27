@@ -24,6 +24,11 @@ class OwnerTest < SystemTest
     assert_cell(@other_user, "Confirmed", "✗")
     assert_cell(@other_user, "Added By", @user.handle)
     assert_cell(@other_user, "Added On", nice_date_for(@ownership.confirmed_at))
+
+    assert_changes :mails_count, from: 0, to: 1 do
+      Delayed::Worker.new.work_off
+    end
+    assert_equal "Please confirm the ownership of #{@rubygem.name} gem on RubyGems.org", last_email.subject
   end
 
   test "adding owner via UI with handle" do
@@ -34,6 +39,11 @@ class OwnerTest < SystemTest
 
     assert_cell(@other_user, "Confirmed", "✗")
     assert_cell(@other_user, "Added By", @user.handle)
+
+    assert_changes :mails_count, from: 0, to: 1 do
+      Delayed::Worker.new.work_off
+    end
+    assert_equal "Please confirm the ownership of #{@rubygem.name} gem on RubyGems.org", last_email.subject
   end
 
   test "owners data is correctly represented" do
@@ -61,6 +71,14 @@ class OwnerTest < SystemTest
     end
 
     refute page.has_selector?("a[href='#{profile_path(@other_user)}']")
+
+    assert_changes :mails_count, from: 0, to: 2 do
+      Delayed::Worker.new.work_off
+    end
+
+    owner_removed_emails = ActionMailer::Base.deliveries.last(2)
+    assert_equal "You were removed as an owner to #{@rubygem.name} gem", owner_removed_emails.first.subject
+    assert_equal "User #{@other_user.handle} was removed as an owner to #{@rubygem.name} gem", owner_removed_emails.second.subject
   end
 
   test "removing last owner shows error message" do
@@ -74,6 +92,10 @@ class OwnerTest < SystemTest
 
     assert page.has_selector?("a[href='#{profile_path(@user)}']")
     assert page.has_selector? "#flash_alert", text: "Owner cannot be removed!"
+
+    assert_no_changes :mails_count do
+      Delayed::Worker.new.work_off
+    end
   end
 
   test "clicking on confirmation link confirms the account" do
@@ -83,6 +105,14 @@ class OwnerTest < SystemTest
 
     assert_equal page.current_path, rubygem_path(@rubygem)
     assert page.has_selector? "#flash_notice", text: "You are added as an owner to #{@rubygem.name} gem!"
+
+    assert_changes :mails_count, from: 0, to: 2 do
+      Delayed::Worker.new.work_off
+    end
+
+    owner_added_emails = ActionMailer::Base.deliveries.last(2)
+    assert_equal "You were added as an owner to #{@rubygem.name} gem", owner_added_emails.second.subject
+    assert_equal "User #{@unconfirmed_ownership.user.handle} was added as an owner to #{@rubygem.name} gem", owner_added_emails.first.subject
   end
 
   test "clicking on incorrect link shows error" do
@@ -91,8 +121,11 @@ class OwnerTest < SystemTest
 
     assert_equal page.current_path, root_path
     assert page.has_selector? "#flash_alert", text: "The confirmation token has expired. Please try resending the token"
-  end
 
+    assert_no_changes :mails_count do
+      Delayed::Worker.new.work_off
+    end
+  end
 
   test "shows ownership link when is owner" do
     visit rubygem_path(@rubygem)

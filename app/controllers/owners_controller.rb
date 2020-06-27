@@ -15,7 +15,7 @@ class OwnersController < ApplicationController
   end
 
   def resend_confirmation
-    ownership = @rubygem.ownerships.find_by(user: current_user)
+    ownership = @rubygem.ownerships_including_unconfirmed.find_by(user: current_user)
     if ownership&.generate_confirmation_token && ownership&.save
       Mailer.delay.ownership_confirmation(ownership.id)
       redirect_to rubygem_path(ownership.rubygem), notice: "A confirmation mail has been re-sent to #{ownership.user.handle}'s email"
@@ -25,7 +25,7 @@ class OwnersController < ApplicationController
   end
 
   def index
-    @ownerships = @rubygem.ownerships.includes(:user, :authorizer)
+    @ownerships = @rubygem.ownerships_including_unconfirmed.includes(:user, :authorizer)
   end
 
   def create
