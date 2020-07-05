@@ -15,15 +15,15 @@ class OwnerTest < SystemTest
   test "adding owner via UI with email" do
     visit_ownerships_page
 
-    fill_in "Name of user", with: @other_user.email
+    fill_in "Email/Handle", with: @other_user.email
     click_button "Add Owner"
     within(".owners__table") do
       assert page.has_content? @other_user.handle
     end
 
-    assert_cell(@other_user, "Confirmed", "✗")
-    assert_cell(@other_user, "Added By", @user.handle)
-    assert_cell(@other_user, "Added On", nice_date_for(@ownership.confirmed_at))
+    assert_cell(@other_user, "Confirmed", "Pending")
+    assert_additional_owner_info(@other_user, "added-by", @user.handle)
+    assert_additional_owner_info(@other_user, "added-on", nice_date_for(@ownership.confirmed_at))
 
     assert_changes :mails_count, from: 0, to: 1 do
       Delayed::Worker.new.work_off
@@ -34,11 +34,11 @@ class OwnerTest < SystemTest
   test "adding owner via UI with handle" do
     visit_ownerships_page
 
-    fill_in "Name of user", with: @other_user.handle
+    fill_in "Email/Handle", with: @other_user.handle
     click_button "Add Owner"
 
-    assert_cell(@other_user, "Confirmed", "✗")
-    assert_cell(@other_user, "Added By", @user.handle)
+    assert_cell(@other_user, "Confirmed", "Pending")
+    assert_additional_owner_info(@other_user, "added-by", @user.handle)
 
     assert_changes :mails_count, from: 0, to: 1 do
       Delayed::Worker.new.work_off
@@ -52,11 +52,15 @@ class OwnerTest < SystemTest
 
     visit_ownerships_page
 
-    assert_cell(@other_user, "Confirmed", "✗")
-    assert_cell(@other_user, "MFA", "✔")
+    assert_cell(@other_user, "Confirmed", "Pending")
+    assert_additional_owner_info(@other_user, "title", @other_user.handle)
+    assert_additional_owner_info(@other_user, "subtitle", @other_user.name)
+    assert_additional_owner_info(@other_user, "mfa", "🔒 Enabled")
 
-    assert_cell(@user, "Confirmed", "✔")
-    assert_cell(@other_user, "MFA", "✗")
+    assert_cell(@user, "Confirmed", "Confirmed")
+    assert_additional_owner_info(@user, "title", @user.handle)
+    assert_additional_owner_info(@user, "subtitle", @user.name)
+    assert_additional_owner_info(@user, "mfa", "🔓 Disabled")
   end
 
   test "removing owner" do
@@ -159,6 +163,15 @@ class OwnerTest < SystemTest
       assert page.has_selector?("a[href='#{profile_path(user)}']")
       within(find("tr", text: user.handle)) do
         find("td[data-title='#{column}']").has_content? expected
+      end
+    end
+  end
+
+  def assert_additional_owner_info(user, data, expected)
+    within(".owners__table") do
+      assert page.has_selector?("a[href='#{profile_path(user)}']")
+      within(find("tr", text: user.handle)) do
+        find(".tooltip-#{data}").has_content? expected
       end
     end
   end

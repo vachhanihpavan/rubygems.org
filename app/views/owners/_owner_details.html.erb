@@ -1,0 +1,15 @@
+<div class="tooltip tooltip-effect">
+  <div class="tooltip-item"><%= link_to(owner.name, profile_path(owner), class: "owner_profile") %></div>
+  <div class="tooltip-content">
+    <%= gravatar(160, owner.handle, owner) %>
+    <div class="tooltip-text">
+      <span class="tooltip-title"><%= owner.handle %></span>
+      <br>
+      <span class="tooltip-subtitle"><%= owner.name %></span>
+      <hr>
+      <div class="tooltip-mfa">MFA: <%= mfa_status(ownership.user) %></div>
+      <div class="tooltip-added-by">ADDED BY: <%= ownership.authorizer.name %></div>
+      <div class="tooltip-added-on">ADDED ON: <%= nice_date_for(ownership.confirmed_at) if ownership.confirmed? %></div>
+    </div>
+  </div>
+</div>
