@@ -39,6 +39,10 @@ class Ownership < ApplicationRecord
     !confirmed?
   end
 
+  def expired?
+    !confirmed? && !valid_confirmation_token?
+  end
+
   def notify_owner_removed
     rubygem.notifiable_owners.each do |notified_user|
       Mailer.delay.owner_removed(user_id, notified_user.id, rubygem_id)

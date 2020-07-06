@@ -37,7 +37,7 @@ class OwnersControllerTest < ActionController::TestCase
     context "on POST to create ownership" do
       setup do
         @new_owner = create(:user)
-        post :create, params: { owner: @new_owner.handle, rubygem_id: @rubygem.name }
+        post :create, params: { ownership: { email: @new_owner.handle }, rubygem_id: @rubygem.name }
       end
 
       should redirect_to("ownerships index") { rubygem_owners_path(@rubygem) }

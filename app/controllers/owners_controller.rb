@@ -29,7 +29,7 @@ class OwnersController < ApplicationController
   end
 
   def create
-    owner = User.find_by_name(params[:owner])
+    owner = User.find_by_name(params.dig(:ownership, :email))
     if owner
       ownership = @rubygem.ownerships.new(user: owner, authorizer: current_user)
       if ownership.save
