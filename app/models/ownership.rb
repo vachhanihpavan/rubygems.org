@@ -21,6 +21,10 @@ class Ownership < ApplicationRecord
       .order("rubygems.name ASC")
   end
 
+  def self.find_by_owner_handle(handle)
+    joins(:user).find_by!(users: { handle: handle })
+  end
+
   def valid_confirmation_token?
     token_expires_at > Time.zone.now
   end
@@ -31,7 +35,7 @@ class Ownership < ApplicationRecord
   end
 
   def confirm_ownership!
-    update(confirmed_at: Time.current)
+    update(confirmed_at: Time.current, token: nil)
   end
 
   def confirmed?

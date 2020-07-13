@@ -25,7 +25,7 @@ class OwnersController < ApplicationController
   end
 
   def create
-    owner = User.find_by_name(params[:owner])
+    owner = User.find_by_name(params[:handle])
     if owner
       ownership = @rubygem.ownerships.new(user: owner, authorizer: current_user)
       if ownership.save
@@ -40,7 +40,7 @@ class OwnersController < ApplicationController
   end
 
   def destroy
-    @ownership = Ownership.find_by!(id: params[:id])
+    @ownership = @rubygem.ownerships_including_unconfirmed.find_by_owner_handle(params[:handle])
     if @ownership.destroy_and_notify
       redirect_to rubygem_owners_path(@ownership.rubygem), notice: t("owners.destroy.removed_notice", owner_name: @ownership.owner_name)
     else

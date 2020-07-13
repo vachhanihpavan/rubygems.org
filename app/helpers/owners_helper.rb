@@ -17,9 +17,9 @@ module OwnersHelper
 
   def confirmation_status(ownership)
     if ownership.confirmed?
-      content_tag(:span, "\u2705 Confirmed", class: "owners__span--success")
+      content_tag(:span, "\u2714 Confirmed", class: "owners__span--success")
     else
-      content_tag(:span, "\u274C Pending", class: "owners__span--danger")
+      content_tag(:span, "\u23F3 Pending")
     end
   end
 
@@ -27,7 +27,7 @@ module OwnersHelper
     if user.mfa_level == "disabled"
       content_tag(:span, "\u274C")
     else
-      content_tag(:span, "\u2705")
+      content_tag(:span, "\u2714", class: "owners__span--success")
     end
   end
 end

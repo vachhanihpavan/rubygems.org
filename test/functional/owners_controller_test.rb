@@ -37,7 +37,7 @@ class OwnersControllerTest < ActionController::TestCase
     context "on POST to create ownership" do
       setup do
         @new_owner = create(:user)
-        post :create, params: { owner: @new_owner.handle, rubygem_id: @rubygem.name }
+        post :create, params: { handle: @new_owner.handle, rubygem_id: @rubygem.name }
       end
 
       should redirect_to("ownerships index") { rubygem_owners_path(@rubygem) }
@@ -59,7 +59,7 @@ class OwnersControllerTest < ActionController::TestCase
 
       context "remove user as gem owner" do
         setup do
-          delete :destroy, params: { rubygem_id: @rubygem.name, id: @ownership.id }
+          delete :destroy, params: { rubygem_id: @rubygem.name, handle: @owner.handle }
         end
         should redirect_to("ownership index") { rubygem_owners_path(@rubygem) }
         should "remove the ownership record" do
@@ -71,7 +71,7 @@ class OwnersControllerTest < ActionController::TestCase
         setup do
           @ownership.destroy
           @last_ownership = @rubygem.ownerships.last
-          delete :destroy, params: { rubygem_id: @rubygem.name, id: @last_ownership.id }
+          delete :destroy, params: { rubygem_id: @rubygem.name, handle: @last_ownership.user.handle }
         end
         should redirect_to("ownership index") { rubygem_owners_path(@rubygem) }
         should "remove the ownership record" do
@@ -88,7 +88,7 @@ class OwnersControllerTest < ActionController::TestCase
         @new_owner = create(:user)
         @ownership = create(:ownership, :unconfirmed, rubygem: @rubygem, user: @new_owner)
         sign_in_as(@new_owner)
-        get :resend_confirmation, params: { rubygem_id: @rubygem.name }
+        get :resend_confirmation, params: { rubygem_id: @rubygem.name, handle: @new_owner.handle }
       end
 
       should redirect_to("rubygem show") { rubygem_path(@rubygem) }
