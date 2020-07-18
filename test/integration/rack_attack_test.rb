@@ -74,7 +74,7 @@ class RackAttackTest < ActionDispatch::IntegrationTest
         stay_under_limit_for("owners/ip")
         stay_under_email_limit_for("owners/email")
 
-        get "/gems/#{@rubygem.name}/owners/#{@user.handle}/resend_confirmation",
+        get "/gems/#{@rubygem.name}/owners/#{@user.display_id}/resend_confirmation",
             headers: { REMOTE_ADDR: @ip_address }
         follow_redirect!
         assert_response :success
@@ -279,7 +279,7 @@ class RackAttackTest < ActionDispatch::IntegrationTest
 
       should "throttle ownership confirmation resend at level" do
         exceed_limit_for("owners/ip")
-        get "/gems/#{@rubygem.name}/owners/#{@user.handle}/resend_confirmation", headers: { REMOTE_ADDR: @ip_address }
+        get "/gems/#{@rubygem.name}/owners/#{@user.display_id}/resend_confirmation", headers: { REMOTE_ADDR: @ip_address }
 
         assert_response :too_many_requests
       end
@@ -479,7 +479,7 @@ class RackAttackTest < ActionDispatch::IntegrationTest
           other_user = create(:user)
           create(:ownership, :unconfirmed, rubygem: @rubygem, user: other_user)
           exceed_handle_limit_for("owners/email", other_user)
-          get "/gems/#{@rubygem.name}/owners/#{other_user.handle}/resend_confirmation"
+          get "/gems/#{@rubygem.name}/owners/#{other_user.display_id}/resend_confirmation"
 
           assert_response :too_many_requests
         end
@@ -487,14 +487,14 @@ class RackAttackTest < ActionDispatch::IntegrationTest
         should "throttle adding owner" do
           new_user = create(:user)
           exceed_handle_limit_for("owners/email", new_user)
-          post "/gems/#{@rubygem.name}/owners", params: { handle: new_user.handle }
+          post "/gems/#{@rubygem.name}/owners", params: { handle: new_user.display_id }
 
           assert_response :too_many_requests
         end
 
         should "throttle removing owner" do
           exceed_handle_limit_for("owners/email", @user)
-          delete "/gems/#{@rubygem.name}/owners/#{@user.handle}"
+          delete "/gems/#{@rubygem.name}/owners/#{@user.display_id}"
 
           assert_response :too_many_requests
         end

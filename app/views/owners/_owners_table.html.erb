@@ -39,7 +39,7 @@
         <%= nice_date_for(ownership.confirmed_at) if ownership.confirmed? %>
       </td>
       <td class="owners__cell" data-title="Action">
-        <%= button_to "Remove", rubygem_owner_path(@rubygem, ownership.owner_name), method: "delete", class: "form__submit form__submit--small" %>
+        <%= button_to "Remove", rubygem_owner_path(@rubygem, ownership.user.display_id), method: "delete", class: "form__submit form__submit--small" %>
       </td>
     </tr>
   <% end %>

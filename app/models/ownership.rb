@@ -22,7 +22,7 @@ class Ownership < ApplicationRecord
   end
 
   def self.find_by_owner_handle(handle)
-    joins(:user).find_by!(users: { handle: handle })
+    joins(:user).find_by(users: { handle: handle }) || joins(:user).find_by!(users: { id: handle })
   end
 
   def valid_confirmation_token?

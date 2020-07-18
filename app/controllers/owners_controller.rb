@@ -17,7 +17,7 @@ class OwnersController < ApplicationController
     ownership = @rubygem.ownerships_including_unconfirmed.find_by!(user: current_user)
     ownership.generate_confirmation_token && ownership.save
     OwnersMailer.delay.ownership_confirmation(ownership.id)
-    redirect_to rubygem_path(ownership.rubygem), notice: t("owners.resend_confirmation.resent_notice", handle: ownership.user.handle)
+    redirect_to rubygem_path(ownership.rubygem), notice: t("owners.resend_confirmation.resent_notice", handle: ownership.owner_name)
   end
 
   def index
@@ -30,7 +30,7 @@ class OwnersController < ApplicationController
       ownership = @rubygem.ownerships.new(user: owner, authorizer: current_user)
       if ownership.save
         OwnersMailer.delay.ownership_confirmation(ownership.id)
-        redirect_to rubygem_owners_path(@rubygem), notice: t("owners.create.success_notice", handle: owner.handle)
+        redirect_to rubygem_owners_path(@rubygem), notice: t("owners.create.success_notice", handle: owner.name)
       else
         redirect_to rubygem_owners_path(@rubygem), alert: ownership.errors.full_messages.to_sentence
       end
