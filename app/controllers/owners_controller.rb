@@ -15,9 +15,13 @@ class OwnersController < ApplicationController
 
   def resend_confirmation
     ownership = @rubygem.ownerships_including_unconfirmed.find_by!(user: current_user)
-    ownership.generate_confirmation_token && ownership.save
-    OwnersMailer.delay.ownership_confirmation(ownership.id)
-    redirect_to rubygem_path(ownership.rubygem), notice: t("owners.resend_confirmation.resent_notice", handle: ownership.owner_name)
+    if ownership.generate_confirmation_token && ownership.save
+      OwnersMailer.delay.ownership_confirmation(ownership.id)
+      flash[:notice] = t("owners.resend_confirmation.resent_notice", handle: ownership.owner_name)
+    else
+      flash[:alert] = t("try_again")
+    end
+    redirect_to rubygem_path(ownership.rubygem)
   end
 
   def index

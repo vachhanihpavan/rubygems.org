@@ -111,4 +111,18 @@ class OwnershipTest < ActiveSupport::TestCase
       assert @ownership.valid_confirmation_token?
     end
   end
+
+  context "#create_first" do
+    setup do
+      @rubygem = create(:rubygem)
+      @user = create(:user)
+      Ownership.create_first(@rubygem, @user)
+    end
+
+    should "create confirmed ownership" do
+      ownership = Ownership.last
+      assert_nil ownership.token
+      assert_not_nil ownership.confirmed_at
+    end
+  end
 end
