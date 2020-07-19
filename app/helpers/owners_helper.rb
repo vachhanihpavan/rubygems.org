@@ -15,6 +15,22 @@ module OwnersHelper
     end
   end
 
+  def owner_added_subject(owner, user, rubygem)
+    if owner.id == user.id
+      I18n.t("mailer.owner_added.subject_self", gem: rubygem.name)
+    else
+      I18n.t("mailer.owner_added.subject_others", gem: rubygem.name, owner_handle: owner.handle)
+    end
+  end
+
+  def owner_removed_subject(owner, user, rubygem)
+    if owner.id == user.id
+      I18n.t("mailer.owner_removed.subject_self", gem: rubygem.name)
+    else
+      I18n.t("mailer.owner_removed.subject_others", gem: rubygem.name, owner_handle: owner.handle)
+    end
+  end
+
   def confirmation_status(ownership)
     if ownership.confirmed?
       content_tag(:span, "\u2714 Confirmed", class: "owners__span--success")
