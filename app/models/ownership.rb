@@ -25,6 +25,11 @@ class Ownership < ApplicationRecord
     joins(:user).find_by(users: { handle: handle }) || joins(:user).find_by!(users: { id: handle })
   end
 
+  def self.create_first(rubygem, user)
+    ownership = rubygem.ownerships.create(user: user, authorizer: user)
+    ownership.confirm_ownership!
+  end
+
   def valid_confirmation_token?
     token_expires_at > Time.zone.now
   end
