@@ -33,17 +33,23 @@ module OwnersHelper
 
   def confirmation_status(ownership)
     if ownership.confirmed?
-      content_tag(:span, "\u2714 Confirmed", class: "owners__span--success")
+      content_tag(:span, class: "owners__icon") do
+        concat image_tag("/images/check.svg")
+        concat "Confirmed"
+      end
     else
-      content_tag(:span, "\u23F3 Pending")
+      content_tag(:span, class: "owners__icon") do
+        concat image_tag("/images/clock.svg")
+        concat "Pending"
+      end
     end
   end
 
   def mfa_status(user)
     if user.mfa_level == "disabled"
-      content_tag(:span, "\u274C")
+      content_tag(:span, image_tag("/images/x.svg"), class: "owners__icon")
     else
-      content_tag(:span, "\u2714", class: "owners__span--success")
+      content_tag(:span, image_tag("/images/check.svg"), class: "owners__icon")
     end
   end
 end
