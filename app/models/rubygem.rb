@@ -210,7 +210,6 @@ class Rubygem < ApplicationRecord
 
     ownership = ownerships.create(user: user, authorizer: user)
     ownership.confirm_ownership!
-    ownership
   end
 
   def update_versions!(version, spec)
