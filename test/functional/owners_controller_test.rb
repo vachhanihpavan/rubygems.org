@@ -35,19 +35,29 @@ class OwnersControllerTest < ActionController::TestCase
     end
 
     context "on POST to create ownership" do
-      setup do
-        @new_owner = create(:user)
-        post :create, params: { handle: @new_owner.display_id, rubygem_id: @rubygem.name }
+      context "with correct params" do
+        setup do
+          @new_owner = create(:user)
+          post :create, params: { handle: @new_owner.display_id, rubygem_id: @rubygem.name }
+        end
+
+        should redirect_to("ownerships index") { rubygem_owners_path(@rubygem) }
+        should "add unconfirmed ownership record" do
+          assert @rubygem.owners_including_unconfirmed.include?(@new_owner)
+          assert_nil @rubygem.ownerships_including_unconfirmed.find_by(user: @new_owner).confirmed_at
+        end
+        should "set success notice flash" do
+          expected_notice = "Owner added successfully. A confirmation mail has been sent to #{@new_owner.handle}'s email"
+          assert_equal expected_notice, flash[:notice]
+        end
       end
 
-      should redirect_to("ownerships index") { rubygem_owners_path(@rubygem) }
-      should "add unconfirmed ownership record" do
-        assert @rubygem.owners_including_unconfirmed.include?(@new_owner)
-        assert_nil @rubygem.ownerships_including_unconfirmed.find_by(user: @new_owner).confirmed_at
-      end
-      should "set success notice flash" do
-        expected_notice = "Owner added successfully. A confirmation mail has been sent to #{@new_owner.handle}'s email"
-        assert_equal expected_notice, flash[:notice]
+      context "with incorrect params" do
+        should "show error message" do
+          post :create, params: { handle: "no_user", rubygem_id: @rubygem.name }
+          expected_alert = "User must exist"
+          assert_equal expected_alert, flash[:alert]
+        end
       end
     end
 

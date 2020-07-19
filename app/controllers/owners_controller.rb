@@ -26,16 +26,12 @@ class OwnersController < ApplicationController
 
   def create
     owner = User.find_by_name(params[:handle])
-    if owner
-      ownership = @rubygem.ownerships.new(user: owner, authorizer: current_user)
-      if ownership.save
-        OwnersMailer.delay.ownership_confirmation(ownership.id)
-        redirect_to rubygem_owners_path(@rubygem), notice: t("owners.create.success_notice", handle: owner.name)
-      else
-        redirect_to rubygem_owners_path(@rubygem), alert: ownership.errors.full_messages.to_sentence
-      end
+    ownership = @rubygem.ownerships.new(user: owner, authorizer: current_user)
+    if ownership.save
+      OwnersMailer.delay.ownership_confirmation(ownership.id)
+      redirect_to rubygem_owners_path(@rubygem), notice: t("owners.create.success_notice", handle: owner.name)
     else
-      redirect_to rubygem_owners_path(@rubygem), alert: t("owners.create.not_found_notice")
+      redirect_to rubygem_owners_path(@rubygem), alert: ownership.errors.full_messages.to_sentence
     end
   end
 

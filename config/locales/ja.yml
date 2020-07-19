@@ -420,7 +420,6 @@ ja:
       resent_notice:
     create:
       success_notice:
-      not_found_notice:
     destroy:
       removed_notice:
       failed_notice:
