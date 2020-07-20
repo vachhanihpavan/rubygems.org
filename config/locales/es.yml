@@ -426,6 +426,8 @@ es:
       added_by:
       action:
       info:
+      email_field:
+      submit_button:
     resend_confirmation:
       resent_notice:
     create:

@@ -268,6 +268,8 @@ en:
       added_by: ADDED BY
       action: ACTION
       info: Use this page to control which Rubygems users can help you to manage %{gem}.
+      email_field: Email / Handle
+      submit_button: Add Owner
     resend_confirmation:
       resent_notice: A confirmation mail has been re-sent to %{handle}'s email
     create:
