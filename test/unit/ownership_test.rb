@@ -125,4 +125,38 @@ class OwnershipTest < ActiveSupport::TestCase
       assert_not_nil ownership.confirmed_at
     end
   end
+
+  context "#find_by_owner_handle" do
+    setup do
+      @rubygem = create(:rubygem)
+      @user = create(:user)
+      @ownership = create(:ownership, rubygem: @rubygem, user: @user)
+    end
+
+    should "find owner by matching handle/id" do
+      assert_equal @ownership, @rubygem.ownerships.find_by_owner_handle(@user.handle)
+      assert_equal @ownership, @rubygem.ownerships.find_by_owner_handle(@user)
+    end
+
+    should "raise not found" do
+      assert_raise ActiveRecord::RecordNotFound do
+        @rubygem.ownerships.find_by_owner_handle("wrong user")
+      end
+    end
+  end
+
+  context "#confirm_ownership!" do
+    setup do
+      @rubygem = create(:rubygem)
+      user = create(:user)
+      @ownership = create(:ownership, :unconfirmed, rubygem: @rubygem, user: user)
+      @ownership.confirm_ownership!
+    end
+
+    should "confirm ownership" do
+      assert_nil @ownership.token
+      assert_not_nil @ownership.confirmed_at
+      assert_includes @rubygem.ownerships, @ownership
+    end
+  end
 end
