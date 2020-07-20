@@ -145,6 +145,8 @@ es:
       subject: Cambiaste la configuración de tus notificaciones por email de RubyGems.org
       title: NOTIFICACIONES POR EMAIL
       subtitle: ¡Hola %{handle}!
+      on:
+      off:
     gem_pushed:
       subject: Gema %{gem} subida a RubyGems.org
       title: GEMA SUBIDA

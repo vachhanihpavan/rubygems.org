@@ -145,6 +145,8 @@ en:
       subject: You changed your RubyGems.org email notification settings
       title: EMAIL NOTIFICATIONS
       subtitle: Hi %{handle}
+      on: ON
+      off: <b>OFF</b>
     gem_pushed:
       subject: Gem %{gem} pushed to RubyGems.org
       title: GEM PUSHED
