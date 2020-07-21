@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_16_071636) do
+ActiveRecord::Schema.define(version: 2020_07_21_153502) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -96,6 +96,32 @@ ActiveRecord::Schema.define(version: 2020_05_16_071636) do
     t.datetime "updated_at", null: false
     t.integer "processed_count"
     t.index ["directory", "key"], name: "index_log_tickets_on_directory_and_key", unique: true
+  end
+
+  create_table "ownership_calls", force: :cascade do |t|
+    t.bigint "rubygem_id"
+    t.bigint "user_id"
+    t.string "note"
+    t.string "email"
+    t.boolean "status", default: true, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["rubygem_id"], name: "index_ownership_calls_on_rubygem_id"
+    t.index ["user_id"], name: "index_ownership_calls_on_user_id"
+  end
+
+  create_table "ownership_requests", force: :cascade do |t|
+    t.bigint "rubygem_id"
+    t.bigint "ownership_call_id"
+    t.bigint "user_id"
+    t.string "note"
+    t.integer "status", limit: 2, default: 0, null: false
+    t.integer "approver_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ownership_call_id"], name: "index_ownership_requests_on_ownership_call_id"
+    t.index ["rubygem_id"], name: "index_ownership_requests_on_rubygem_id"
+    t.index ["user_id"], name: "index_ownership_requests_on_user_id"
   end
 
   create_table "ownerships", id: :serial, force: :cascade do |t|

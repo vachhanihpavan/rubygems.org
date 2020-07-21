@@ -1,0 +1,16 @@
+<li class="small">
+  <div class="gems__gem">
+    <div class="gems__gem__info">
+      <%= link_to ownership_request.user_name, profile_path(ownership_request.user), class: "gems__gem__name" %>
+      <p class="gems__gem__desc t-text">
+        <strong>Note from applicant:</strong>
+      </p>
+      <p class="gems__gem__desc t-text"><%= ownership_request.note %></p>
+      <%= yield %>
+    </div>
+    <p class="gems__gem__downloads__count">
+      <%= ownership_request.user.total_rubygems_count.to_s %>
+      <span class="gems__gem__downloads__heading">Gems Published</span>
+    </p>
+  </div>
+</li>

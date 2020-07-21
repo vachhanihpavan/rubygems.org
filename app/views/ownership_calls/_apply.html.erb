@@ -1,0 +1,5 @@
+<%= render "ownership_call", ownership_call: ownership_call, rubygem: ownership_call.rubygem do %>
+  <div>
+    <%= link_to "Apply", rubygem_ownership_calls_path(ownership_call.rubygem), class: "form__submit form__submit--medium" %>
+  </div>
+<% end %>

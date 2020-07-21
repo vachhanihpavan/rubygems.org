@@ -1,0 +1,19 @@
+<% @title = "Ownership Calls" %>
+<% @subtitle = @rubygem.name %>
+
+<h2 class="t-list__heading">Ownership Calls:</h2>
+<% if @ownership_call %>
+  <%= render partial: "close", locals: { ownership_call: @ownership_call, rubygem: @rubygem } %>
+<% elsif @rubygem.owned_by?(current_user) %>
+  <br />
+  <%= render partial: "form" %>
+<% else %>
+  <div class="t-list__item">
+    <p>No ownership calls for <%= @rubygem.name %> </p>
+  </div>
+<% end %>
+
+<h3 class="t-list__heading">Ownership Requests:
+  <%= link_to "Close All", close_rubygem_ownership_requests_path(@rubygem), class: "t-link--black" unless @ownership_requests.empty? %>
+</h3>
+<%= render "ownership_requests/list" %>

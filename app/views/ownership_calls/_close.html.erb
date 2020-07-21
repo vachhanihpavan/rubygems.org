@@ -1,0 +1,5 @@
+<%= render "ownership_calls/ownership_call", ownership_call: ownership_call do %>
+  <% if ownership_call.rubygem.owned_by?(current_user) %>
+    <div><%= button_to "Close", rubygem_ownership_calls_path(ownership_call.rubygem), method: :patch, class: "form__submit form__submit--medium" %></div>
+  <% end %>
+<% end %>

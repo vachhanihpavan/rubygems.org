@@ -1,0 +1,28 @@
+<li class="small">
+  <div class="gems__gem">
+    <div class="gems__gem__info">
+      <a href="<%= rubygem_path(ownership_call.rubygem) %>" class="gems__gem__name">
+        <%= ownership_call.rubygem_name %>
+      </a>
+      <p class="gems__gem__desc t-text">
+        <%= short_info(ownership_call.rubygem) %>
+      </p>
+      <p class="gems__gem__desc t-text"><strong>Note from owner:</strong></p>
+      <p class="gems__gem__desc t-text">
+        <%= simple_markup(ownership_call.note) %>
+      </p>
+      <p class="gems__gem__desc t-text">
+        <strong>Contact:</strong>
+        <%= link_to ownership_call.user_display_handle, profile_path(ownership_call.user), class: "t-text t-link" %>
+        (<%= mail_to ownership_call.email, ownership_call.email, subject: "Regarding ownership call of #{ownership_call.rubygem_name}", class: "t-text t-link" %>)
+      </p>
+      <div><%= yield %></div>
+    </div>
+    <p class="gems__gem__downloads__count">
+      <%= download_count ownership_call.rubygem %>
+      <span class="gems__gem__downloads__heading">
+        <%= t("rubygems.index.downloads") %>
+      </span>
+    </p>
+  </div>
+</li>

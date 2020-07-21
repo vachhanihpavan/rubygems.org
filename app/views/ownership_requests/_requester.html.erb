@@ -1,0 +1,3 @@
+<%= render "ownership_requests/ownership_request", ownership_request: ownership_request do %>
+  <%= button_to "Close", rubygem_ownership_request_path(ownership_request.rubygem, ownership_request), params: { status: "close" }, method: :patch, class: "form__submit form__submit--medium" %>
+<% end %>

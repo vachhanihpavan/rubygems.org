@@ -41,6 +41,11 @@ class ProfilesController < ApplicationController
     redirect_to root_path, notice: t(".request_queued")
   end
 
+  def ownership_calls
+    @ownership_calls = current_user.ownership_calls
+    @ownership_requests = current_user.ownership_requests.opened
+  end
+
   private
 
   def params_user

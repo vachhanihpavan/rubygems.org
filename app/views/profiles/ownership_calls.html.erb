@@ -1,0 +1,8 @@
+<% @title = "Your Ownership Calls" %>
+
+<h1>Ownership Calls</h1>
+<%= render partial: "ownership_calls/close", collection: @ownership_calls, as: :ownership_call %>
+
+<br />
+<h1>Ownership Requests</h1>
+<%= render partial: "ownership_requests/requester", collection: @ownership_requests, as: :ownership_request %>

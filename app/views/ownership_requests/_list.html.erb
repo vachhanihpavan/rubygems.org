@@ -1,0 +1,9 @@
+<% if @rubygem.owned_by?(current_user) %>
+  <div class="t-list__items">
+    <%= render(partial: "ownership_requests/owner", collection: @ownership_requests, as: :ownership_request) || "No ownership requests for #{@rubygem.name}" %>
+  </div>
+<% elsif @user_request %>
+  <%= render("ownership_requests/requester", ownership_request: @user_request) %>
+<% else %>
+  <%= render("ownership_requests/form") %>
+<% end %>
