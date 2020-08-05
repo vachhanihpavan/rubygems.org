@@ -92,11 +92,6 @@ module RubygemsHelper
             rubygem_ownership_calls_path(rubygem), class: "gem__link t-list__item"
   end
 
-  def ownership_requests_link(rubygem)
-    link_to "Ownership Request",
-            rubygem_ownership_calls_path(rubygem), class: "gem__link t-list__item"
-  end
-
   def links_to_owners(rubygem)
     rubygem.owners.sort_by(&:id).inject("") { |link, owner| link << link_to_user(owner) }.html_safe
   end

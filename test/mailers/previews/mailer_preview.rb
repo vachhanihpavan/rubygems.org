@@ -69,4 +69,14 @@ class MailerPreview < ActionMailer::Preview
     user = User.last
     OwnersMailer.owner_added(owner.id, user.id, user.id, gem.id)
   end
+
+  def new_ownership_requests
+    gem = Rubygem.order(updated_at: :desc).last
+    OwnersMailer.new_ownership_requests(gem.id)
+  end
+
+  def ownership_request_approved
+    ownership_request = OwnershipRequest.last
+    OwnersMailer.ownership_request_approved(ownership_request.id)
+  end
 end

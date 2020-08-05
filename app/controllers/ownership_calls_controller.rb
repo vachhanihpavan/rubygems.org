@@ -1,6 +1,7 @@
 class OwnershipCallsController < ApplicationController
   before_action :set_page, only: :index
   before_action :find_rubygem, except: :index
+  before_action :render_not_found, unless: :can_request?, only: :show
   before_action :redirect_to_signin, unless: :owner?, only: %i[create update]
   before_action :redirect_to_signin, unless: :signed_in?, only: :show
 
@@ -41,5 +42,9 @@ class OwnershipCallsController < ApplicationController
 
   def owner?
     @rubygem.owned_by?(current_user)
+  end
+
+  def can_request?
+    @rubygem.can_request?
   end
 end

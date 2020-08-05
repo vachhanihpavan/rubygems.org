@@ -73,7 +73,7 @@
     <%= reverse_dependencies_link(@rubygem) %>
     <%= ownership_link(@rubygem) if current_user && @rubygem.owned_by?(current_user) %>
     <%= resend_owner_confirmation_link(@rubygem) if @rubygem.unconfirmed_ownership?(current_user) %>
-    <%= ownership_calls_link(@rubygem) %>
-    <%#= ownership_requests_link(@rubygem) %>
+    <%= ownership_calls_link(@rubygem) if @rubygem.can_request? || (current_user && @rubygem.owned_by?(current_user)) %>
+    <%#= ownership_calls_link(@rubygem) %>
   </div>
 </div>

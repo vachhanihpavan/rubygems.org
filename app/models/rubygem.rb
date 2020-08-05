@@ -218,7 +218,7 @@ class Rubygem < ApplicationRecord
   end
 
   def can_request?
-    updated_at > 1.year.ago && downloads < 100_000
+    ownership_calls.opened.any? || (updated_at > 1.year.ago && downloads < 100_000)
   end
 
   def update_versions!(version, spec)
