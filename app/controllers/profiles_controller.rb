@@ -42,8 +42,8 @@ class ProfilesController < ApplicationController
   end
 
   def ownership_calls
-    @ownership_calls = current_user.ownership_calls
-    @ownership_requests = current_user.ownership_requests.opened
+    @ownership_calls = current_user.ownership_calls.includes(:user, rubygem: [:latest_version, :gem_download])
+    @ownership_requests = current_user.ownership_requests.includes(:rubygem)
   end
 
   private

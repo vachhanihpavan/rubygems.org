@@ -56,8 +56,7 @@ FactoryBot.define do
   factory :ownership_call do
     rubygem
     user
-    note { "small note here" }
-    email
+    note { "small note" }
     trait :closed do
       status { "closed" }
     end

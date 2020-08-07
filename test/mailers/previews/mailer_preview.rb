@@ -75,6 +75,11 @@ class MailerPreview < ActionMailer::Preview
     OwnersMailer.new_ownership_requests(gem.id)
   end
 
+  def ownership_request_closed
+    ownership_request = OwnershipRequest.last
+    OwnersMailer.ownership_request_closed(ownership_request.id)
+  end
+
   def ownership_request_approved
     ownership_request = OwnershipRequest.last
     OwnersMailer.ownership_request_approved(ownership_request.id)

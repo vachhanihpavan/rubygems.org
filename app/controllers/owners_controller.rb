@@ -47,10 +47,4 @@ class OwnersController < ApplicationController
       redirect_to rubygem_owners_path(@ownership.rubygem), alert: t("owners.destroy.failed_notice")
     end
   end
-
-  private
-
-  def owner?
-    @rubygem.owned_by?(current_user)
-  end
 end

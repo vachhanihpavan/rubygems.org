@@ -7,7 +7,7 @@
 </header>
 
 <div class="t-list__items">
-  <%= render partial: "apply", collection: @ownership_calls, as: :ownership_call %>
+  <%= render partial: "apply", layout: "ownership_call", collection: @ownership_calls, as: :ownership_call %>
 </div>
 
 <%= paginate @ownership_calls %>

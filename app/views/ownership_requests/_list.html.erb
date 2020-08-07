@@ -1,9 +1,17 @@
+<h3 class="t-list__heading">Ownership Requests:
+  <%= link_to "Close All", close_rubygem_ownership_requests_path(@rubygem), class: "t-link--black" if @rubygem.owned_by?(current_user) && !@ownership_requests.empty? %>
+</h3>
+
 <% if @rubygem.owned_by?(current_user) %>
   <div class="t-list__items">
-    <%= render(partial: "ownership_requests/owner", collection: @ownership_requests, as: :ownership_request) || "No ownership requests for #{@rubygem.name}" %>
+    <%= render(partial: "ownership_requests/owner", layout: "ownership_requests/ownership_request", collection: @ownership_requests, as: :ownership_request) || "No ownership requests for #{@rubygem.name}" %>
   </div>
+
 <% elsif @user_request %>
-  <%= render("ownership_requests/requester", ownership_request: @user_request) %>
+  <%= render "ownership_requests/ownership_request", ownership_request: @user_request do %>
+    <%= button_to "Close", rubygem_ownership_request_path(@user_request.rubygem, @user_request), params: { status: "close" }, method: :patch, class: "form__submit form__submit--medium" %>
+  <% end %>
+
 <% else %>
-  <%= render("ownership_requests/form") %>
+  <%= render "ownership_requests/form" %>
 <% end %>

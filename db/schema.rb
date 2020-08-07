@@ -16,6 +16,28 @@ ActiveRecord::Schema.define(version: 2020_07_21_153502) do
   enable_extension "hstore"
   enable_extension "plpgsql"
 
+  create_table "adoption_requests", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "rubygem_id"
+    t.integer "approver_id"
+    t.string "note"
+    t.integer "status", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["rubygem_id"], name: "index_adoption_requests_on_rubygem_id"
+    t.index ["user_id"], name: "index_adoption_requests_on_user_id"
+  end
+
+  create_table "adoptions", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "rubygem_id"
+    t.string "note"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["rubygem_id"], name: "index_adoptions_on_rubygem_id"
+    t.index ["user_id"], name: "index_adoptions_on_user_id"
+  end
+
   create_table "announcements", id: :serial, force: :cascade do |t|
     t.text "body"
     t.datetime "created_at"
@@ -101,8 +123,7 @@ ActiveRecord::Schema.define(version: 2020_07_21_153502) do
   create_table "ownership_calls", force: :cascade do |t|
     t.bigint "rubygem_id"
     t.bigint "user_id"
-    t.string "note"
-    t.string "email"
+    t.text "note"
     t.boolean "status", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -114,7 +135,7 @@ ActiveRecord::Schema.define(version: 2020_07_21_153502) do
     t.bigint "rubygem_id"
     t.bigint "ownership_call_id"
     t.bigint "user_id"
-    t.string "note"
+    t.text "note"
     t.integer "status", limit: 2, default: 0, null: false
     t.integer "approver_id"
     t.datetime "created_at", precision: 6, null: false
@@ -251,4 +272,8 @@ ActiveRecord::Schema.define(version: 2020_07_21_153502) do
     t.index ["user_id", "rubygem_id"], name: "index_web_hooks_on_user_id_and_rubygem_id"
   end
 
+  add_foreign_key "adoption_requests", "rubygems"
+  add_foreign_key "adoption_requests", "users"
+  add_foreign_key "adoptions", "rubygems"
+  add_foreign_key "adoptions", "users"
 end

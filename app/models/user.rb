@@ -25,8 +25,8 @@ class User < ApplicationRecord
   has_many :deletions, dependent: :nullify
   has_many :web_hooks, dependent: :destroy
 
-  has_many :ownership_calls, dependent: :destroy
-  has_many :ownership_requests, dependent: :destroy
+  has_many :ownership_calls, -> { opened }, dependent: :destroy, inverse_of: :user
+  has_many :ownership_requests, -> { opened }, dependent: :destroy, inverse_of: :user
 
   after_validation :set_unconfirmed_email, if: :email_changed?, on: :update
   before_create :generate_api_key, :generate_confirmation_token

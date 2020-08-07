@@ -1,12 +1,11 @@
 class OwnershipCall < ApplicationRecord
-  belongs_to :rubygem
-  belongs_to :user
-  has_many :ownership_requests, dependent: :destroy
+  belongs_to :rubygem, inverse_of: :ownership_calls
+  belongs_to :user, inverse_of: :ownership_calls
+  has_many :ownership_requests, -> { opened }, dependent: :destroy, inverse_of: :ownership_call
 
-  validates :note, length: { maximum: Gemcutter::MAX_FIELD_LENGTH }
-  validates :email, length: { maximum: Gemcutter::MAX_FIELD_LENGTH }, format: { with: URI::MailTo::EMAIL_REGEXP }, presence: true
-  validates :rubygem_id, :user_id, :status, presence: true
-  validates :rubygem_id, uniqueness: { conditions: -> { opened } }
+  validates :note, length: { maximum: Gemcutter::MAX_TEXT_FIELD_LENGTH }
+  validates :rubygem_id, :user_id, :status, :note, presence: true
+  validates :rubygem_id, uniqueness: { conditions: -> { opened }, message: "can have only one open ownership call" }
 
   delegate :name, to: :rubygem, prefix: true
   delegate :display_handle, to: :user, prefix: true
@@ -14,11 +13,7 @@ class OwnershipCall < ApplicationRecord
   enum status: { opened: true, closed: false }
 
   def close
-    ownership_requests.opened.update_all(status: :closed)
+    ownership_requests.close_all
     update(status: :closed)
-  end
-
-  def applied_by?(user)
-    ownership_requests.where(user: user).exists?
   end
 end

@@ -34,11 +34,17 @@ class OwnershipRequestTest < ActiveSupport::TestCase
       assert ownership_request.opened?
     end
 
-    should "not create a call with note longer than 255 chars" do
-      ownership_request = build(:ownership_request, user: @user, rubygem: @rubygem,
-                             note: "r" * (Gemcutter::MAX_FIELD_LENGTH + 1))
+    should "not create a call without note" do
+      ownership_request = build(:ownership_request, user: @user, rubygem: @rubygem, note: nil)
       refute ownership_request.valid?
-      assert_contains ownership_request.errors[:note], "is too long (maximum is 255 characters)"
+      assert_contains ownership_request.errors[:note], "can't be blank"
+    end
+
+    should "not create a call with note longer than 64000 chars" do
+      ownership_request = build(:ownership_request, user: @user, rubygem: @rubygem,
+                                note: "r" * (Gemcutter::MAX_TEXT_FIELD_LENGTH + 1))
+      refute ownership_request.valid?
+      assert_contains ownership_request.errors[:note], "is too long (maximum is 64000 characters)"
     end
 
     should "not create multiple calls for same user and rubygem" do
@@ -52,52 +58,70 @@ class OwnershipRequestTest < ActiveSupport::TestCase
   context "#approve" do
     setup do
       @ownership_request = create(:ownership_request, user: @user, rubygem: @rubygem)
+      @approver = create(:user)
+      create(:ownership, rubygem: @rubygem, user: @approver)
+    end
+    should "return true" do
+      assert @ownership_request.approve(@approver)
+    end
+    should "update approver" do
+      @ownership_request.approve(@approver)
+      assert @ownership_request.approved?
+      assert_equal @approver, @ownership_request.approver
     end
 
-    context "with correct params" do
-      setup do
-        @approver = create(:user)
-        @ownership_request.approve(@approver)
-      end
-      should "update approver" do
-        assert @ownership_request.approved?
-        assert_equal @approver, @ownership_request.approver
-      end
-
-      should "create confirmed ownership" do
-        ownership = Ownership.find_by(user: @user, rubygem: @rubygem)
-        assert_equal @approver, ownership.authorizer
-        assert ownership.confirmed?
-      end
+    should "create confirmed ownership" do
+      @ownership_request.approve(@approver)
+      ownership = Ownership.find_by(user: @user, rubygem: @rubygem)
+      assert_equal @approver, ownership.authorizer
+      assert ownership.confirmed?
     end
 
-    context "with incorrect params" do
-      should "not update if approver is nil" do
-        @ownership_request.approve(nil)
-        refute @ownership_request.approved?
-        assert_nil Ownership.find_by(user: @user, rubygem: @rubygem)
-      end
+    should "return false if cannot update status" do
+      OwnershipRequest.any_instance.stubs(:update).returns(false)
+      refute @ownership_request.approve(@approver)
+      assert_nil Ownership.find_by(user: @user, rubygem: @rubygem)
     end
   end
 
-  context "#can_close?" do
+  context "#close" do
     setup do
       @ownership_request = create(:ownership_request, user: @user, rubygem: @rubygem)
     end
 
-    should "return true if created by self" do
-      assert @ownership_request.can_close? @user
-    end
-
-    should "return true if owned by user" do
-      other_user = create(:user)
-      create(:ownership, user: other_user, rubygem: @rubygem)
-      assert @ownership_request.can_close? other_user
-    end
-
     should "return false if cannot close" do
       other_user = create(:user)
-      refute @ownership_request.can_close? other_user
+      refute @ownership_request.close(other_user)
+      refute @ownership_request.closed?
+    end
+
+    should "return true if closed by requester" do
+      assert @ownership_request.close(@user)
+      assert @ownership_request.closed?
+    end
+
+    should "return true if closed by owner" do
+      other_user = create(:user)
+      create(:ownership, user: other_user, rubygem: @rubygem)
+      assert @ownership_request.close(other_user)
+      assert @ownership_request.closed?
+    end
+
+    should "return false if cannot update status" do
+      OwnershipRequest.any_instance.stubs(:update).returns(false)
+      refute @ownership_request.close(@user)
+      refute @ownership_request.closed?
+    end
+  end
+
+  context "#close_all" do
+    should "return count of records closed" do
+      create_list(:ownership_request, 3, rubygem: @rubygem)
+      assert_equal true, @rubygem.ownership_requests.close_all
+    end
+
+    should "return 0 no records updated" do
+      assert_equal true, @rubygem.ownership_requests.close_all
     end
   end
 end

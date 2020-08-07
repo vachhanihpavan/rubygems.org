@@ -38,18 +38,8 @@ class OwnersMailer < ApplicationMailer
   def new_ownership_requests(rubygem_id)
     @rubygem = Rubygem.find(rubygem_id)
     @ownership_requests_count = @rubygem.ownership_requests.opened.count
-    @rubygem.owners.each do |owner|
-      mail to: owner.email,
-           subject: "New ownership request(s) for #{@rubygem.name}"
-    end
-  end
-
-  def ownership_request_submitted(ownership_request_id)
-    @ownership_request = OwnershipRequest.find(ownership_request_id)
-    @rubygem = @ownership_request.rubygem
-    @user = @ownership_request.user
-    mail to: @user.email,
-         subject: "Your ownership request was successfully submitted."
+    mail to: @rubygem.owners.pluck(:email),
+         subject: "New ownership request(s) for #{@rubygem.name}"
   end
 
   def ownership_request_approved(ownership_request_id)

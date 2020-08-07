@@ -30,6 +30,11 @@ class Ownership < ApplicationRecord
     ownership.confirm!
   end
 
+  def self.create_confirmed_and_notify(rubygem, user, approver)
+    ownership = rubygem.ownerships.create(user: user, authorizer: approver)
+    ownership.confirm_and_notify
+  end
+
   def valid_confirmation_token?
     token_expires_at > Time.zone.now
   end

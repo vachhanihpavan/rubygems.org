@@ -5,7 +5,9 @@
       <p class="gems__gem__desc t-text">
         <strong>Note from applicant:</strong>
       </p>
-      <p class="gems__gem__desc t-text"><%= ownership_request.note %></p>
+      <p class="gems__gem__desc t-text">
+        <%= sanitize_note(ownership_request.note) %>
+      </p>
       <%= yield %>
     </div>
     <p class="gems__gem__downloads__count">

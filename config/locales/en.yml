@@ -178,6 +178,15 @@ en:
       title: OWNER REMOVED
       subtitle: Hi %{user_handle}!
       body_html: <b>You</b> were removed as an owner for <strong>%{gem}</strong> gem on RubyGems.org by <b>%{authorizer}</b>.
+    ownerhip_request_closed:
+      title: OWNERSHIP REQUEST
+      subtitle: Hi %{handle}!
+      body_html: Thank you for applying for ownership of <strong>%{gem}</strong>. We regret to inform you that your ownership request was rejected.
+    ownerhip_request_approved:
+      body_html: Congratulations! Your ownership request for <strong>%{gem}</strong> was approved. You were added as an owner to the gem.
+    new_opwnership_requests:
+      body_html: This email is to inform you that there are <em>%{count}</em> open ownership requests for <strong>%{gem}</strong>. Please click on the button below to view all requests.
+      button: OWNERSHIP REQUESTS
   news:
     show:
       title: New Releases — All Gems
@@ -442,3 +451,18 @@ en:
         one: Displaying <b>1</b> %{model}
         other: Displaying <b>all&nbsp;%{count}</b> %{model}
         zero: No %{model} found
+  ownership_calls:
+    update:
+      success_notice: The ownership call for %{gem} is successfully closed.
+    create:
+      success_notice: The ownership call for %{gem} is now open!
+    show:
+      title: "Ownership Calls"
+  ownership_requests:
+    create:
+      success_notice: Your ownership request is successfully submitted!
+    update:
+      approved_notice: Ownership request is approved! %{name} is added as an owner.
+      closed_notice: Ownership request is closed successfully.
+    close:
+      success_notice: All open ownership requests for %{gem} are closed!
