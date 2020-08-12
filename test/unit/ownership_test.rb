@@ -132,11 +132,26 @@ class OwnershipTest < ActiveSupport::TestCase
     end
   end
 
-  context "#create_first" do
+  context "#create_confirmed" do
     setup do
       @rubygem = create(:rubygem)
       @user = create(:user)
-      Ownership.create_confirmed(@rubygem, @user)
+      Ownership.create_confirmed(@rubygem, @user, @user)
+    end
+
+    should "create confirmed ownership" do
+      ownership = Ownership.last
+      assert_nil ownership.token
+      assert ownership.confirmed?
+    end
+  end
+
+  context "#create_confirmed_and_notify" do
+    setup do
+      @rubygem = create(:rubygem)
+      @user = create(:user)
+      @approver = create(:user)
+      Ownership.create_confirmed_and_notify(@rubygem, @user, @approver)
     end
 
     should "create confirmed ownership" do

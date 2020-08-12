@@ -71,6 +71,14 @@
     font-weight: 600;
 }
 
+.form__submit--medium {
+    padding: 4px 25px 4px 25px;
+    font-weight: 600;
+    text-align: center;
+    margin: 20px 20px 0 0;
+    float: left;
+}
+
 .download__format {
   margin-bottom: 24px;
   padding-top: 10px;

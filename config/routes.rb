@@ -131,6 +131,7 @@ Rails.application.routes.draw do
     resources :profiles, only: :show
     resource :multifactor_auth, only: %i[new create update]
     resource :profile, only: %i[edit update] do
+      get :ownership_calls
       member do
         get :delete
         delete :destroy, as: :destroy
@@ -159,7 +160,13 @@ Rails.application.routes.draw do
         get 'confirm/:token', to: 'owners#confirm', as: :confirm, on: :collection
         get 'resend_confirmation', to: 'owners#resend_confirmation', as: :resend_confirmation, on: :member
       end
+      resource :ownership_calls, only: %i[show update create]
+      resources :ownership_requests, only: %i[create update] do
+        get 'close', to: 'ownership_requests#close', as: :close, on: :collection
+      end
     end
+
+    resources :ownership_calls, only: :index
 
     ################################################################################
     # Clearance Overrides and Additions

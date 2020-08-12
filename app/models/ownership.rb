@@ -25,9 +25,14 @@ class Ownership < ApplicationRecord
     joins(:user).find_by(users: { handle: handle }) || joins(:user).find_by!(users: { id: handle })
   end
 
-  def self.create_confirmed(rubygem, user)
-    ownership = rubygem.ownerships.create(user: user, authorizer: user)
+  def self.create_confirmed(rubygem, user, approver)
+    ownership = rubygem.ownerships.create(user: user, authorizer: approver)
     ownership.confirm!
+  end
+
+  def self.create_confirmed_and_notify(rubygem, user, approver)
+    ownership = rubygem.ownerships.create(user: user, authorizer: approver)
+    ownership.confirm_and_notify
   end
 
   def valid_confirmation_token?

@@ -1,0 +1,22 @@
+<% @title = t("ownership_calls.show.title") %>
+<% @subtitle = @rubygem.name %>
+
+<h2 class="t-list__heading">Ownership Calls:</h2>
+<% if @ownership_call %>
+  <%= render "ownership_call", ownership_call: @ownership_call do %>
+    <% if @ownership_call.rubygem.owned_by?(current_user) %>
+      <div><%= button_to "Close", rubygem_ownership_calls_path(@ownership_call.rubygem), method: :patch, class: "form__submit form__submit--medium" %></div>
+    <% end %>
+  <% end %>
+
+<% elsif @rubygem.owned_by?(current_user) %>
+  <br /><%= render partial: "form" %>
+
+<% else %>
+  <div class="t-list__item">
+    <p>No ownership calls for <%= @rubygem.name %> </p>
+  </div>
+
+<% end %>
+
+<%= render "ownership_requests/list" %>

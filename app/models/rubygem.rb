@@ -15,6 +15,8 @@ class Rubygem < ApplicationRecord
   has_many :web_hooks, dependent: :destroy
   has_one :linkset, dependent: :destroy
   has_one :gem_download, -> { where(version_id: 0) }, inverse_of: :rubygem
+  has_many :ownership_calls, -> { opened }, dependent: :destroy, inverse_of: :rubygem
+  has_many :ownership_requests, -> { opened }, dependent: :destroy, inverse_of: :rubygem
 
   validate :ensure_name_format, if: :needs_name_validation?
   validates :name,
@@ -208,7 +210,15 @@ class Rubygem < ApplicationRecord
   def create_ownership(user)
     return unless unowned?
 
-    Ownership.create_confirmed(self, user)
+    Ownership.create_confirmed(self, user, user)
+  end
+
+  def ownership_call
+    ownership_calls.last
+  end
+
+  def can_request_ownership?
+    ownership_calls.any? || (updated_at > 1.year.ago && downloads < 100_000)
   end
 
   def update_versions!(version, spec)

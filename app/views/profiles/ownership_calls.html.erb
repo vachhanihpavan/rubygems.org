@@ -1,0 +1,23 @@
+<% @title = "Your Ownership Calls" %>
+
+<h1>Ownership Calls</h1>
+<%= render partial: "ownership_calls/close", layout: "ownership_calls/ownership_call", collection: @ownership_calls, as: :ownership_call %>
+
+<br />
+<h1>Ownership Requests</h1>
+<% @ownership_requests.each do |ownership_request| %>
+  <li class="small">
+    <div class="gems__gem">
+      <div class="gems__gem__info">
+        <%= link_to ownership_request.rubygem_name, rubygem_path(ownership_request.rubygem_id), class: "gems__gem__name" %>
+        <p class="gems__gem__desc t-text">
+          <strong>Note from applicant:</strong>
+        </p>
+        <p class="gems__gem__desc t-text">
+          <%= sanitize_note(ownership_request.note) %>
+        </p>
+        <%= button_to "Close", rubygem_ownership_request_path(ownership_request.rubygem_id, ownership_request), params: { status: "close" }, method: :patch, class: "form__submit form__submit--medium" %>
+      </div>
+    </div>
+  </li>
+<% end %>
