@@ -32,7 +32,20 @@ class PasswordsController < Clearance::PasswordsController
     end
   end
 
+  def verify
+    if verify_user
+      session[:verification] = Time.current + 10.minutes
+      redirect_to verify_password_params[:redirect_uri]
+    else
+      render_not_found
+    end
+  end
+
   private
+
+  def verify_user
+    current_user.authenticated? verify_password_params[:password]
+  end
 
   def find_user_for_create
     Clearance.configuration.user_model
@@ -45,6 +58,10 @@ class PasswordsController < Clearance::PasswordsController
 
   def password_params
     params.require(:password).permit(:email)
+  end
+
+  def verify_password_params
+    params.require(:verify_password).permit(:password, :redirect_uri)
   end
 
   def reset_params

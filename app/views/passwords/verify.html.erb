@@ -1,0 +1,17 @@
+<% @title = "Confirm Password" %>
+
+<div class="t-body">
+  <p>The page you are trying to access has sensitive data. Please confirm your password to continue.</p>
+  <p><%= link_to t(".forgot_password"), new_password_path, class: 't-list__item' %></p>
+</div>
+
+<%= form_for :verify_password, url: verify_user_password_path(current_user), method: :post do |form| %>
+  <%= form.hidden_field :redirect_uri, value: @redirect_uri %>
+  <div class="password_field">
+    <%= form.label :password, t("activerecord.attributes.session.password"), class: "form__label" %>
+    <%= form.password_field :password, class: "form__input" %>
+  </div>
+  <div class="form_bottom">
+    <%= form.submit "Confirm", :data => {:disable_with => t("form_disable_with")}, class: "form__submit" %>
+  </div>
+<% end %>

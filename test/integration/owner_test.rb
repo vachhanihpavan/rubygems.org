@@ -173,6 +173,10 @@ class OwnerTest < SystemTest
   def visit_ownerships_page
     visit rubygem_path(@rubygem)
     click_link "Ownership"
+    return unless page.has_css? "#verify_password_password"
+
+    fill_in "Password", with: PasswordHelpers::SECURE_TEST_PASSWORD
+    click_button "Confirm"
   end
 
   def sign_in_as(user)
