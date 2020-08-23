@@ -150,7 +150,7 @@ class Rack::Attack
 
   throttle("owners/email", limit: REQUEST_LIMIT_PER_EMAIL, period: LIMIT_PERIOD) do |req|
     if protected_route?(protected_ui_owners_actions, req.path, req.request_method)
-      req.params["handle"].presence || Rails.application.routes.recognize_path(req.path, method: req.request_method)[:handle].presence
+      User.find_by_remember_token(req.cookies["remember_token"])&.email.presence
     end
   end
 

@@ -10,6 +10,7 @@ class OwnershipTest < ActiveSupport::TestCase
   should belong_to :user
   should have_db_index :user_id
   should belong_to :authorizer
+  should have_db_index %i[user_id rubygem_id]
 
   context "with ownership" do
     setup do
@@ -107,12 +108,6 @@ class OwnershipTest < ActiveSupport::TestCase
       refute ownership.valid?
       assert_contains ownership.errors[:rubygem], "must exist"
     end
-
-    should "allow creation without authorizer" do
-      ownership = build(:ownership, authorizer: nil)
-      assert ownership.valid?
-      assert_empty ownership.errors.full_messages
-    end
   end
 
   context "#valid_confirmation_token?" do
@@ -132,11 +127,11 @@ class OwnershipTest < ActiveSupport::TestCase
     end
   end
 
-  context "#create_first" do
+  context "#create_confirmed" do
     setup do
-      @rubygem = create(:rubygem)
-      @user = create(:user)
-      Ownership.create_confirmed(@rubygem, @user)
+      rubygem = create(:rubygem)
+      user = create(:user)
+      Ownership.create_confirmed(rubygem, user)
     end
 
     should "create confirmed ownership" do
@@ -203,9 +198,9 @@ class OwnershipTest < ActiveSupport::TestCase
 
   context "#confirmed?" do
     setup do
-      @rubygem = create(:rubygem)
+      rubygem = create(:rubygem)
       user = create(:user)
-      @ownership = create(:ownership, :unconfirmed, rubygem: @rubygem, user: user)
+      @ownership = create(:ownership, :unconfirmed, rubygem: rubygem, user: user)
     end
 
     should "return false if not confirmed" do
@@ -220,9 +215,9 @@ class OwnershipTest < ActiveSupport::TestCase
 
   context "#unconfirmed?" do
     setup do
-      @rubygem = create(:rubygem)
+      rubygem = create(:rubygem)
       user = create(:user)
-      @ownership = create(:ownership, :unconfirmed, rubygem: @rubygem, user: user)
+      @ownership = create(:ownership, :unconfirmed, rubygem: rubygem, user: user)
     end
 
     should "return false if not confirmed" do
