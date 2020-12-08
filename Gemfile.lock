@@ -120,7 +120,7 @@ GEM
       clearance (>= 1.10)
     coderay (1.1.2)
     compact_index (0.13.0)
-    concurrent-ruby (1.1.6)
+    concurrent-ruby (1.1.7)
     crass (1.0.6)
     css_parser (1.7.1)
       addressable
@@ -150,7 +150,7 @@ GEM
       multi_json
     email_validator (1.6.0)
       activemodel
-    erubi (1.9.0)
+    erubi (1.10.0)
     execjs (2.7.0)
     factory_bot (6.0.0)
       activesupport (>= 5.0.0)
@@ -174,7 +174,7 @@ GEM
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     http_accept_language (2.1.1)
-    i18n (1.8.3)
+    i18n (1.8.5)
       concurrent-ruby (~> 1.0)
     jmespath (1.4.0)
     jquery-rails (4.4.0)
@@ -204,7 +204,7 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    loofah (2.6.0)
+    loofah (2.8.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     m (1.5.1)
@@ -229,7 +229,7 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (6.11.0.365)
     nio4r (2.5.2)
-    nokogiri (1.10.9)
+    nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
     optimist (3.0.1)
     parallel (1.19.2)
@@ -244,7 +244,7 @@ GEM
     pry-byebug (3.9.0)
       byebug (~> 11.0)
       pry (~> 0.13.0)
-    public_suffix (4.0.4)
+    public_suffix (4.0.6)
     pwned (1.2.1)
     rack (2.2.3)
     rack-attack (6.3.1)
@@ -310,8 +310,8 @@ GEM
     roadie (4.0.0)
       css_parser (~> 1.4)
       nokogiri (~> 1.8)
-    roadie-rails (2.1.1)
-      railties (>= 5.1, < 6.1)
+    roadie-rails (2.2.0)
+      railties (>= 5.1, < 6.2)
       roadie (>= 3.1, < 5.0)
     rotp (6.0.0)
       addressable (~> 2.7)
@@ -379,7 +379,7 @@ GEM
     timers (4.1.2)
       hitimes
     toxiproxy (1.0.3)
-    tzinfo (1.2.7)
+    tzinfo (1.2.8)
       thread_safe (~> 0.1)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
@@ -405,7 +405,7 @@ GEM
     xml-simple (1.1.5)
     xpath (3.1.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.3.0)
+    zeitwerk (2.4.2)
 
 PLATFORMS
   ruby
