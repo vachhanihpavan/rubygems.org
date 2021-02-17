@@ -120,7 +120,7 @@ GEM
       clearance (>= 1.10)
     coderay (1.1.2)
     compact_index (0.13.0)
-    concurrent-ruby (1.1.6)
+    concurrent-ruby (1.1.8)
     crass (1.0.6)
     css_parser (1.7.1)
       addressable
@@ -174,7 +174,7 @@ GEM
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     http_accept_language (2.1.1)
-    i18n (1.8.3)
+    i18n (1.8.9)
       concurrent-ruby (~> 1.0)
     jmespath (1.4.0)
     jquery-rails (4.4.0)
@@ -271,7 +271,7 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-erd (1.6.0)
+    rails-erd (1.6.1)
       activerecord (>= 4.2)
       activesupport (>= 4.2)
       choice (~> 0.2.0)
@@ -336,7 +336,8 @@ GEM
       activesupport
       rack (>= 1.1)
       rubocop (>= 0.72.0)
-    ruby-graphviz (1.2.4)
+    ruby-graphviz (1.2.5)
+      rexml
     ruby-progressbar (1.10.1)
     rubyzip (2.3.0)
     sass-rails (6.0.0)
@@ -379,7 +380,7 @@ GEM
     timers (4.1.2)
       hitimes
     toxiproxy (1.0.3)
-    tzinfo (1.2.7)
+    tzinfo (1.2.9)
       thread_safe (~> 0.1)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
@@ -405,7 +406,7 @@ GEM
     xml-simple (1.1.5)
     xpath (3.1.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.3.0)
+    zeitwerk (2.4.2)
 
 PLATFORMS
   ruby
